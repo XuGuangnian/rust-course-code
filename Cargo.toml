@@ -4,5 +4,7 @@ members = [
     "complex-num",
     "compound-type",
     "flow-control",
+    "match-pattern",
+    "method",
 ]
 resolver = "2"

@@ -9,6 +9,7 @@ pub(crate) fn run() {
 fn array_for_index() {
     let a = [4, 3, 2, 1];
     // `.iter()` 方法把 `a` 数组变成一个迭代器
+    // enumerate 方法产生一个迭代器，该迭代器每次迭代会返回一个 (索引，值) 形式的元组
     for (i, v) in a.iter().enumerate() {
         println!("第{}个元素是{}", i + 1, v);
     }
