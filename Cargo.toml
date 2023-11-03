@@ -3,5 +3,6 @@ members = [
     "type-conversion",
     "complex-num",
     "compound-type",
+    "flow-control",
 ]
 resolver = "2"
