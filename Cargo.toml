@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "type-conversion",
+    "complex-num",
+    "compound-type",
+]
+resolver = "2"
