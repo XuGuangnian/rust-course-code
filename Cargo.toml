@@ -7,5 +7,6 @@ members = [
     "match-pattern",
     "method",
     "generics-and-traits",
+    "collections",
 ]
 resolver = "2"
