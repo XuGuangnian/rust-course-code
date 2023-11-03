@@ -24,6 +24,10 @@ name = "flow-control"
 version = "0.1.0"
 
 [[package]]
+name = "generics-and-traits"
+version = "0.1.0"
+
+[[package]]
 name = "match-pattern"
 version = "0.1.0"
 

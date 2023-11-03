@@ -6,5 +6,6 @@ members = [
     "flow-control",
     "match-pattern",
     "method",
+    "generics-and-traits",
 ]
 resolver = "2"
