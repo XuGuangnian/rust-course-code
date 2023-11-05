@@ -8,5 +8,6 @@ members = [
     "method",
     "generics-and-traits",
     "collections",
+    "lifetime",
 ]
 resolver = "2"
