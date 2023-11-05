@@ -33,6 +33,10 @@ name = "compound-type"
 version = "0.1.0"
 
 [[package]]
+name = "error"
+version = "0.1.0"
+
+[[package]]
 name = "flow-control"
 version = "0.1.0"
 
