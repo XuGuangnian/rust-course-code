@@ -10,5 +10,7 @@ members = [
     "collections",
     "lifetime",
     "error",
+    "module",
+    "comments",
 ]
 resolver = "2"
