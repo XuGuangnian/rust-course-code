@@ -9,5 +9,6 @@ members = [
     "generics-and-traits",
     "collections",
     "lifetime",
+    "error",
 ]
 resolver = "2"
