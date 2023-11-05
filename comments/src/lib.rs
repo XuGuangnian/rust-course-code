@@ -32,6 +32,7 @@ pub struct Bar;
 pub struct Foo {}
 
 /// 跳转到同名宏 [`foo!`]
+#[allow(non_snake_case)]
 pub fn Foo() {}
 
 #[macro_export]
