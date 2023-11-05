@@ -13,5 +13,6 @@ members = [
     "module",
     "comments",
     "formatted-output",
+    "functional-programming",
 ]
 resolver = "2"

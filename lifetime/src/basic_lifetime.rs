@@ -84,7 +84,7 @@ fn static_lifetime_bound() {
     let i = 5;
     const I: i32 = 5;
     print_it(i);
-    print_it(&i); // &i的生命周期不是 ‘static
+    // print_it(&i); // &i的生命周期不是 ‘static
     print_it(&I);
     print_it_2(&i); // i 的生命周期是 ’static
 
