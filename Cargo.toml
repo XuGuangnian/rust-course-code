@@ -15,5 +15,6 @@ members = [
     "formatted-output",
     "functional-programming",
     "into-types",
+    "smart-pointer",
 ]
 resolver = "2"
