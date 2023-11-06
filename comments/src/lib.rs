@@ -19,7 +19,7 @@ crate 或 module 块注释放在文件开头
 /// ## 生成 html doc
 /// `cargo doc --open`
 /**
-文档快注释
+文档块注释
  */
 pub fn add_one(x: i32) -> i32 {
     x + 1
