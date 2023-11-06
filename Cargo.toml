@@ -14,5 +14,6 @@ members = [
     "comments",
     "formatted-output",
     "functional-programming",
+    "into-types",
 ]
 resolver = "2"
