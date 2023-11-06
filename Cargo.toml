@@ -17,5 +17,6 @@ members = [
     "into-types",
     "smart-pointer",
     "circle-self-ref",
+    "multithreading",
 ]
 resolver = "2"
