@@ -16,5 +16,6 @@ members = [
     "functional-programming",
     "into-types",
     "smart-pointer",
+    "circle-self-ref",
 ]
 resolver = "2"
