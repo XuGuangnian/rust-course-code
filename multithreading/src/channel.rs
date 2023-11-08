@@ -9,7 +9,30 @@ pub(crate) fn run() {
     multi_prod_single_cons();
     mpsc_sync_channel();
     send_multi_types();
+    channel_attention();
     // mpmc crate: crossbeam-channel flume
+}
+
+fn channel_attention() {
+    use std::thread;
+
+    let (send, recv) = mpsc::channel();
+    let num_threads = 3;
+    for i in 0..num_threads {
+        let thread_send = send.clone();
+        thread::spawn(move || {
+            thread_send.send(i).unwrap();
+            println!("thread {:?} finished", i);
+        });
+    }
+
+    // 在这里drop send...
+    drop(send); // drop main线程中的 send
+
+    for x in recv {
+        println!("Got: {}", x);
+    }
+    println!("finished iterating");
 }
 
 enum Fruit {
