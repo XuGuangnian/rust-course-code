@@ -1,6 +1,7 @@
 use std::cell::{Cell, RefCell};
 use std::sync::{Arc, Barrier, Condvar, Mutex, Once};
 use std::thread;
+use std::thread::LocalKey;
 
 use thread_local::ThreadLocal;
 
@@ -48,7 +49,7 @@ fn condition_variables() {
     let (lock, cvar) = &*pair;
     let mut started = lock.lock().unwrap();
     while !*started {
-        started = cvar.wait(started).unwrap();
+        started = cvar.wait(started).unwrap(); // wait 方法挂起等待子线程的通知，并释放了锁 started
     }
 
     println!("started changed");
@@ -78,11 +79,14 @@ fn thread_local_crate() {
 }
 
 fn thread_local_macro() {
+    // 线程局部变量 FOO
     thread_local!(static FOO: RefCell<u32> = RefCell::new(1));
 
+    println!("{:p}", &FOO);
     FOO.with(|f| {
         assert_eq!(*f.borrow(), 1);
         *f.borrow_mut() = 2;
+        println!("{:p}", f);
     });
 
     // 每个线程开始时都会拿到线程局部变量的FOO的初始值
@@ -90,6 +94,7 @@ fn thread_local_macro() {
         FOO.with(|f| {
             assert_eq!(*f.borrow(), 1);
             *f.borrow_mut() = 3;
+            println!("{:p}", f);
         });
     });
 
@@ -99,7 +104,33 @@ fn thread_local_macro() {
     // 尽管子线程中修改为了3，我们在这里依然拥有main线程中的局部值：2
     FOO.with(|f| {
         assert_eq!(*f.borrow(), 2);
+        println!("{:p}", f);
     });
+
+    Foo::FOO.with(|x| println!("{:?}", x));
+
+    Bar::constructor().foo.with(|x| println!("{:?}", x));
+}
+
+struct Foo;
+
+impl Foo {
+    thread_local! {
+        static FOO: RefCell<usize> = RefCell::new(0);
+    }
+}
+
+thread_local! {
+    static FOO: RefCell<usize> = RefCell::new(0);
+}
+struct Bar {
+    foo: &'static LocalKey<RefCell<usize>>,
+}
+
+impl Bar {
+    fn constructor() -> Self {
+        Self { foo: &FOO }
+    }
 }
 
 fn sync_barrier() {
@@ -107,7 +138,7 @@ fn sync_barrier() {
     let barrier = Arc::new(Barrier::new(6));
 
     for _ in 0..6 {
-        let b = barrier.clone();
+        let b = barrier.clone(); // Arc::clone(&barrier)
         handles.push(thread::spawn(move || {
             println!("before wait");
             b.wait();

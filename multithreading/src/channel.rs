@@ -5,6 +5,7 @@ use std::time::Duration;
 
 pub(crate) fn run() {
     single_prod_single_cons();
+    single_prod_single_cons_for();
     multi_prod_single_cons();
     mpsc_sync_channel();
     send_multi_types();
@@ -31,11 +32,12 @@ fn send_multi_types() {
 }
 
 fn mpsc_sync_channel() {
+    // 同步通道 bound: 消息缓存条数
     let (tx, rx) = mpsc::sync_channel(1);
 
     let handle = thread::spawn(move || {
         println!("首次发送之前");
-        tx.send(1).unwrap();
+        tx.send(1).unwrap(); // bound = 0 时，接收者未准备好（等待接收），发送者会阻塞
         println!("首次发送之后");
         tx.send(1).unwrap();
         println!("再次发送之后");
@@ -58,9 +60,41 @@ fn multi_prod_single_cons() {
 
     thread::spawn(move || {
         tx1.send(String::from("hi from cloned tx")).unwrap();
+        thread::sleep(Duration::from_secs(3));
     });
 
     for received in rx {
+        // 需要所有的发送者都被drop掉后，接收者rx才会收到错误，进而跳出for循环，最终结束主线程
+        println!("Got: {}", received);
+    }
+}
+
+fn single_prod_single_cons_for() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("thread"),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+    });
+
+    // std 内部实现
+    // impl<T> Iterator for IntoIter<T> {
+    //     type Item = T;
+    //     fn next(&mut self) -> Option<T> {
+    //         self.rx.recv().ok() // 接收者在此处等待接收
+    //     }
+    // }
+    for received in rx {
+        // 默认调用 rx.into_iter() -> IntoIter
         println!("Got: {}", received);
     }
 }
@@ -80,5 +114,5 @@ fn single_prod_single_cons() {
 
     // 在主线程中接收子线程发送的消息并输出
     // println!("receive {}", rx.try_recv().unwrap()); // 不会阻塞线程，当通道中没有消息时，它会立刻返回一个错误
-    println!("receive {}", rx.recv().unwrap());
+    println!("receive {}", rx.recv().unwrap()); // rx.recv()会阻塞当前线程，直到读取到值，或者通道被关闭
 }
