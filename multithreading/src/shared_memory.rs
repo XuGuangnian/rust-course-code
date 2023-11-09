@@ -1,18 +1,37 @@
 use std::sync::{Arc, Condvar, Mutex, MutexGuard, RwLock};
 use std::thread;
-use std::thread::{sleep, spawn};
 use std::time::Duration;
 
 use lazy_static::lazy_static;
 use tokio::sync::Semaphore;
 
 pub(crate) fn run() {
+    mutex_in_single_thread();
     arc_mutex();
     // dead_lock();
     rwlock();
     // lock crate: parking_lot spin
     condition_variables();
     semaphore();
+}
+
+fn mutex_in_single_thread() {
+    // 使用`Mutex`结构体的关联函数创建新的互斥锁实例
+    let m = Mutex::new(5);
+
+    {
+        // 获取锁，然后deref为`m`的引用
+        // lock返回的是Result
+        let mut num = m.lock().unwrap();
+        // T = MutexGuard
+        // fn deref(&self) -> &T {
+        //     unsafe { &*self.lock.data.get() }
+        // }
+        *num = 6;
+        // 锁自动被drop
+    }
+
+    println!("m = {:?}", m);
 }
 
 #[tokio::main]
@@ -40,7 +59,7 @@ fn condition_variables() {
     let cflag = flag.clone();
     let ccond = cond.clone();
 
-    let handle = spawn(move || {
+    let handle = thread::spawn(move || {
         let mut lock = cflag.lock().unwrap();
         let mut counter = 0;
 
@@ -60,7 +79,7 @@ fn condition_variables() {
 
     let mut counter = 0;
     loop {
-        sleep(Duration::from_millis(1000));
+        thread::sleep(Duration::from_millis(1000));
         *flag.lock().unwrap() = true;
         counter += 1;
         if counter > 3 {
@@ -117,7 +136,7 @@ fn dead_lock() {
                     println!("线程 {} 锁住了MUTEX1，接着准备去锁MUTEX2 !", i_thread);
 
                     // 当前线程睡眠一小会儿，等待线程2锁住MUTEX2
-                    sleep(Duration::from_millis(10));
+                    thread::sleep(Duration::from_millis(10));
 
                     // 去锁MUTEX2
                     let guard = MUTEX2.try_lock().unwrap();
