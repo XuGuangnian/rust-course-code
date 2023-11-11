@@ -3,6 +3,7 @@
 mod atomic;
 mod channel;
 mod multithreading;
+mod send_sync;
 mod shared_memory;
 
 fn main() {
@@ -10,4 +11,5 @@ fn main() {
     channel::run();
     shared_memory::run();
     atomic::run();
+    send_sync::run();
 }
