@@ -34,6 +34,7 @@ fn mutex_in_single_thread() {
     println!("m = {:?}", m);
 }
 
+// async/.await
 #[tokio::main]
 async fn semaphore() {
     let semaphore = Arc::new(Semaphore::new(3));
@@ -44,6 +45,7 @@ async fn semaphore() {
         join_handles.push(tokio::spawn(async move {
             // 在这里执行任务...
             println!("semaphore");
+            thread::sleep(Duration::from_millis(1000));
             drop(permit);
         }));
     }
@@ -162,7 +164,7 @@ fn dead_lock() {
 }
 
 fn arc_mutex() {
-    // 通过`Rc`实现`Mutex`的多所有权
+    // 通过`Arc`实现`Mutex`的多所有权
     let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![];
 

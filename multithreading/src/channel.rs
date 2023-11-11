@@ -14,8 +14,6 @@ pub(crate) fn run() {
 }
 
 fn channel_attention() {
-    use std::thread;
-
     let (send, recv) = mpsc::channel();
     let num_threads = 3;
     for i in 0..num_threads {
