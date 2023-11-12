@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 mod custom_error;
 mod option_result;
 

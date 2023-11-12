@@ -12,11 +12,11 @@ pub fn run() {
 
 fn anyhow_crate() {
     let result = anyhow_test();
-    println!("{:?}", result);
+    println!("result: {:?}", result);
 
     fn anyhow_test() -> anyhow::Result<()> {
-        let html = render()?;
-        println!("{}", html);
+        let render = render()?;
+        println!("render: {}", render);
         Ok(())
     }
 
