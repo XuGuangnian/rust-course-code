@@ -2,7 +2,16 @@
 name = "unsafe-rust"
 version = "0.1.0"
 edition = "2021"
+#links = "bz2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+[build-dependencies]
+bindgen = "0.69.1"
+
+#对于build.rs无效设置 将libbz2放到../target/debug/deps目录下才行，todo
+#[target.x86_64-pc-windows-msvc]
+#rustc-link-search = ["D:/Github/XuGuangnian/rust-course-code/unsafe-rust/lib"]
+#rustc-link-lib = ["bz2"]

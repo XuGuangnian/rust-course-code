@@ -8,4 +8,5 @@ fn main() {
     ffi::run();
     unsafe_trait::run();
     union::run();
+    // bindgen => build.rs
 }
