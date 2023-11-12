@@ -19,5 +19,6 @@ members = [
     "circle-self-ref",
     "multithreading",
     "global-variable",
+    "unsafe-rust",
 ]
 resolver = "2"
