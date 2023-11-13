@@ -146,6 +146,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "hello_macro"
+version = "0.1.0"
+dependencies = [
+ "hello_macro_derive",
+]
+
+[[package]]
+name = "hello_macro_derive"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -183,6 +198,17 @@ checksum = "3c168f8615b12bc01f9c17e2eb0cc07dcae1940121185446edc3744920e8ef45"
 dependencies = [
  "autocfg",
  "scopeguard",
+]
+
+[[package]]
+name = "macro-programming"
+version = "0.1.0"
+dependencies = [
+ "hello_macro",
+ "hello_macro_derive",
+ "route_macro",
+ "route_macro_attribute",
+ "sql_macro",
 ]
 
 [[package]]
@@ -437,6 +463,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "route_macro"
+version = "0.1.0"
+dependencies = [
+ "route_macro_attribute",
+]
+
+[[package]]
+name = "route_macro_attribute"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -475,6 +516,14 @@ checksum = "7b5fac59a5cb5dd637972e5fca70daf0523c9067fcdc4842f053dae04a18f8e9"
 dependencies = [
  "libc",
  "windows-sys",
+]
+
+[[package]]
+name = "sql_macro"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
 ]
 
 [[package]]
