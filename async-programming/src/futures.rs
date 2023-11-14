@@ -30,7 +30,7 @@ where
         // 尝试去完成一个 Future `a`
         if let Some(a) = &mut self.a {
             if let Poll::Ready(()) = a.poll(wake) {
-                self.a.take();
+                self.a.take(); // Takes the value out of the option, leaving a None in its place.
             }
         }
 
@@ -71,7 +71,7 @@ where
         if let Some(first) = &mut self.first {
             match first.poll(wake) {
                 // 我们已经完成了第一个 Future， 可以将它移除， 然后准备开始运行第二个
-                Poll::Ready(()) => self.first.take(),
+                Poll::Ready(()) => self.first.take(), // Takes the value out of the option, leaving a None in its place.
                 // 第一个 Future 还不能完成
                 Poll::Pending => return Poll::Pending,
             };
