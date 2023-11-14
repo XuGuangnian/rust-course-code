@@ -20,5 +20,13 @@ members = [
     "multithreading",
     "global-variable",
     "unsafe-rust",
+    "macro-programming",
+    "hello_macro",
+    "hello_macro/hello_macro_derive",
+    "route_macro",
+    "route_macro/route_macro_attribute",
+    "sql_macro",
+    "async-programming",
+    "timer_future"
 ]
 resolver = "2"

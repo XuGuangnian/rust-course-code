@@ -1,4 +1,3 @@
-
 // 填空
 use std::mem;
 
@@ -14,7 +13,7 @@ fn main() {
 
     assert_eq!(16, len);
 
-    // 我们可以基于 ptr 指针、长度和容量来重新构建 String. 
+    // 我们可以基于 ptr 指针、长度和容量来重新构建 String.
     // 这种操作必须标记为 unsafe，因为我们需要自己来确保这里的操作是安全的
     let s = unsafe { String::from_raw_parts(ptr, len, capacity) };
 
