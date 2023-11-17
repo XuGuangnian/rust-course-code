@@ -37,7 +37,7 @@ impl TimerFuture {
             shared_state.completed = true;
             if let Some(waker) = shared_state.waker.take() {
                 println!("定时结束后，开始唤醒");
-                waker.wake(); // Wake up the task associated with this Waker.
+                waker.wake(); // Wake up the task associated with this Waker. 执行器会对Future再次进行poll
                 println!("定时结束后，唤醒成功");
             }
         });
