@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use std::cell::RefCell;
 use std::marker::PhantomPinned;
 use std::pin::Pin;
