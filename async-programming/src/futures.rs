@@ -1,4 +1,37 @@
-pub fn run() {}
+use std::future::Future;
+use std::pin::Pin;
+use std::task::Context;
+use std::time::Duration;
+
+use async_std::task::sleep;
+
+pub fn run() {
+    // join_test();
+}
+
+fn join_test() {
+    let future_a = future_a();
+    let future_b = future_b();
+    // todo 实现一个可异步运行的Join 和 AndThenFut，进行测试
+    // let join = Join {
+    //     a: Some(future_a),
+    //     b: Some(future_b),
+    // };
+}
+
+async fn future_a() {
+    for i in 0..10 {
+        println!("FutureA running {i}");
+        sleep(Duration::from_millis(1)).await;
+    }
+}
+
+async fn future_b() {
+    for i in 0..10 {
+        println!("FutureB running {i}");
+        sleep(Duration::from_millis(1)).await;
+    }
+}
 
 trait SimpleFuture {
     type Output;
@@ -20,6 +53,14 @@ pub struct Join<FutureA, FutureB> {
     b: Option<FutureB>,
 }
 
+impl<FutureA, FutureB> Future for Join<FutureA, FutureB> {
+    type Output = ();
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> std::task::Poll<Self::Output> {
+        todo!()
+    }
+}
+
 impl<FutureA, FutureB> SimpleFuture for Join<FutureA, FutureB>
 where
     FutureA: SimpleFuture<Output = ()>,
@@ -29,6 +70,7 @@ where
     fn poll(&mut self, wake: fn()) -> Poll<Self::Output> {
         // 尝试去完成一个 Future `a`
         if let Some(a) = &mut self.a {
+            // 此处调用poll，传入函数指针，在poll方法中执行wake函数
             if let Poll::Ready(()) = a.poll(wake) {
                 self.a.take(); // Takes the value out of the option, leaving a None in its place.
             }
@@ -59,6 +101,14 @@ where
 pub struct AndThenFut<FutureA, FutureB> {
     first: Option<FutureA>,
     second: FutureB,
+}
+
+impl<FutureA, FutureB> Future for AndThenFut<FutureA, FutureB> {
+    type Output = ();
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> std::task::Poll<Self::Output> {
+        todo!()
+    }
 }
 
 impl<FutureA, FutureB> SimpleFuture for AndThenFut<FutureA, FutureB>

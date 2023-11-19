@@ -35,7 +35,7 @@ struct Task {
     future: Mutex<Option<BoxFuture<'static, ()>>>,
 
     /// 可以将该任务自身放回到任务通道中，等待执行器的poll
-    task_sender: SyncSender<Arc<Task>>, // ???
+    task_sender: SyncSender<Arc<Task>>, // 自引用
 }
 
 fn new_executor_and_spawner() -> (Executor, Spawner) {
@@ -59,6 +59,10 @@ impl Spawner {
 }
 
 impl ArcWake for Task {
+    // fn wake(self: Arc<Self>) {
+    //     Self::wake_by_ref(&self)
+    // }
+
     fn wake_by_ref(arc_self: &Arc<Self>) {
         // 通过发送任务到任务管道的方式来实现`wake`，这样`wake`后，任务就能被执行器`poll`
         println!("wake by ref");
@@ -74,7 +78,7 @@ impl Executor {
             // 获取一个future，若它还没有完成(仍然是Some，不是None)，则对它进行一次poll并尝试完成它
             let mut future_slot = task.future.lock().unwrap();
             if let Some(mut future) = future_slot.take() {
-                // 基于任务自身创建一个 `LocalWaker`
+                // 基于任务自身创建一个 `LocalWaker`, Creates a reference to a Waker from a reference to Arc<impl ArcWake>.
                 let waker = waker_ref(&task);
                 let context = &mut Context::from_waker(&*waker);
                 // BoxFuture<T>是Pin<Box<dyn Future<Output = T> + Send + 'static>>的类型别名
