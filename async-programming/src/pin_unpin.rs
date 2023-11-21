@@ -42,7 +42,7 @@ impl Test {
     fn new(txt: &str) -> Self {
         Test {
             a: String::from(txt),
-            b: std::ptr::null(),
+            b: std::ptr::null(), // Creates a null raw pointer.
         }
     }
 
