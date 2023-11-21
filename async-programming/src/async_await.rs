@@ -6,6 +6,7 @@ pub fn run() {
     async_usage();
     async_lifetime();
     async_move();
+    // 横跨.await 持有一个非 future 感知的锁，可能导致死锁：use futures::lock::Mutex instead of std:sync:Mutex
 }
 
 fn async_move() {
@@ -61,17 +62,21 @@ fn async_lifetime() {
         async move { *x } // 此处发生的是复制 Copy trait
     }
 
+    async fn borrow_x(x: &u8) -> u8 {
+        *x
+    }
+
     // fn bad() -> impl Future<Output = u8> {
     //     let x: u8 = 5;
     //     borrow_x(&x) // ERROR: `x` does not live long enough
     // }
     //
-    // fn good() -> impl Future<Output = u8> {
-    //     async {
-    //         let x: u8 = 5;
-    //         borrow_x(&x).await
-    //     }
-    // }
+    fn good() -> impl Future<Output = u8> {
+        async {
+            let x: u8 = 5;
+            borrow_x(&x).await
+        }
+    }
 }
 
 fn async_usage() {
