@@ -6,6 +6,7 @@ mod futures;
 mod phantom_pinned;
 mod phantom_pinned_heap;
 mod pin_unpin;
+mod stream_trait;
 
 fn main() {
     async_intro::run();
@@ -14,4 +15,5 @@ fn main() {
     phantom_pinned::run();
     phantom_pinned_heap::run();
     async_await::run();
+    stream_trait::run()
 }
